@@ -9,8 +9,10 @@ namespace task1.FileWatcher;
 public class FileWatcher
 {
     private readonly FileSystemWatcher _watcher;
+    private readonly FileSaver.FileSaver _fileSaver;
     public FileWatcher()
     {
+        _fileSaver = new();
         var pathToListen = ConfigurationManager.AppSettings.Get("A");
         _watcher = new(pathToListen);
 
@@ -24,7 +26,7 @@ public class FileWatcher
                                       | NotifyFilters.Size;
         _watcher.EnableRaisingEvents = true;
         _watcher.Created += OnCreated;
-        _watcher.Filter = "*.*";
+        _watcher.Filter = "*.*";//prop filter does not support multipule file filters
     }
 
     async void OnCreated(object sender, FileSystemEventArgs e)
@@ -33,8 +35,8 @@ public class FileWatcher
         if(extention == ".txt")
         {
             var handler = new TextFileHandler(e.FullPath);
-            var transactions = await handler.ExecuteAsync();
-            var output = FileProcessor.Transform(transactions);
+            var fileInfo = await handler.ExecuteAsync();
+            await _fileSaver.Remember(fileInfo);
             return;
         }
     }

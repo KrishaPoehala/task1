@@ -7,9 +7,7 @@ namespace task1.FileHandlers;
 
 public class TextFileHandler
 {
-    public int InvalidLinesCount { get; private set; }
-    public static bool IsFileInvalid { get; private set; }
-
+    private int _invalidLinesCount;
     private readonly TextSource<Entities.Transaction> _textSource;
     private readonly MemoryDestination<Entities.Transaction> _dest;
     public TextFileHandler(string path)
@@ -24,13 +22,18 @@ public class TextFileHandler
         _textSource.LinkTo(_dest);
     }
 
-    public async Task<ICollection<Entities.Transaction>> ExecuteAsync()
+    public async Task<Entities.FileInfo> ExecuteAsync()
     {
         await Network.ExecuteAsync(_textSource);
-        return _dest.Data;
+        return new Entities.FileInfo() 
+        { 
+            Transactions = _dest.Data, 
+            InvalidLinesCount = _invalidLinesCount,
+            FullPath = _textSource.Uri,
+        };
     }
 
-    public Entities.Transaction? Handle(string line)
+    private Entities.Transaction? Handle(string line)
     {
         try
         {
@@ -45,12 +48,12 @@ public class TextFileHandler
                 AccountNumber = AccountHelper.Parse(tokens[7]),
                 Service = tokens[8],
             };
+
             return transaction;
         }
         catch
         {
-            IsFileInvalid = true;
-            ++InvalidLinesCount;
+            ++_invalidLinesCount;
             return null;
         }
     }
