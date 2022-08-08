@@ -45,7 +45,6 @@ public class TextFileHandler
                 AccountNumber = AccountHelper.Parse(tokens[7]),
                 Service = tokens[8],
             };
-            Console.WriteLine();
             return transaction;
         }
         catch
