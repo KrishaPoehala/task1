@@ -41,3 +41,5 @@ C:\Users\huawei\source\repos\task1\task1\bin\Debug\net6.0\Microsoft.Extensions.P
 C:\Users\huawei\source\repos\task1\task1\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\huawei\source\repos\task1\task1\bin\Debug\net6.0\System.Memory.Data.dll
 C:\Users\huawei\source\repos\task1\task1\bin\Debug\net6.0\TSQL_Parser.dll
+C:\Users\huawei\source\repos\task1\task1\bin\Debug\net6.0\CsvHelper.dll
+C:\Users\huawei\source\repos\task1\task1\bin\Debug\net6.0\ETLBox.Csv.dll

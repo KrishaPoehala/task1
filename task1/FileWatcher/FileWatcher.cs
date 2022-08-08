@@ -41,7 +41,6 @@ public class FileWatcher : IDisposable
         {
             var fileHandler = new TextFileHandler(e.FullPath);
             fileInfo = await fileHandler.ExecuteAsync();
-            await _fileSaver.Remember(fileInfo);
         }
         else if (extention == ".csv")
         {

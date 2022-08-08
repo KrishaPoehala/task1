@@ -10,7 +10,6 @@
   <ItemGroup>
     <Folder Include="A\" />
     <Folder Include="B\08.08.2022\" />
-    <Folder Include="Extentions\" />
     <Folder Include="B\" />
   </ItemGroup>
 
