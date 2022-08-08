@@ -61,9 +61,9 @@ public class FileSaver
 
     private double GetTimerInterval()
     {
-        //return (DateTime.Today.AddHours(23).AddMinutes(59).AddSeconds(59) - DateTime.Now)
-        //.TotalMilliseconds;
-
-        return 2000;
+        return (DateTime.Today
+            .AddHours(23).AddMinutes(59).AddSeconds(59) - DateTime.Now)
+            .TotalMilliseconds;
+        //return 2000;
     }
 }

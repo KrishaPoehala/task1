@@ -1,13 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "Fq8IHGlGqt7JDvJEvujRzR2NEH8WlmWn3D2JHG+2n2vmZRVALfiY1rPCO/W4FA9qv6vzm82sLOGM6DV4XCX5rQ==",
+  "dgSpecHash": "B2/aVMqYIoWXr5s8+JwNXZPtjgInMmZU3Tx6ZaaM7prSo57rd5e9MgSD7s2EYU/SSMKSYk59TVOlpm0IJir8nA==",
   "success": true,
   "projectFilePath": "C:\\Users\\huawei\\source\\repos\\task1\\task1\\task1.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\huawei\\.nuget\\packages\\azure.core\\1.19.0\\azure.core.1.19.0.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\azure.storage.blobs\\12.10.0\\azure.storage.blobs.12.10.0.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\azure.storage.common\\12.9.0\\azure.storage.common.12.9.0.nupkg.sha512",
+    "C:\\Users\\huawei\\.nuget\\packages\\csvhelper\\27.1.1\\csvhelper.27.1.1.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\etlbox\\2.6.2\\etlbox.2.6.2.nupkg.sha512",
+    "C:\\Users\\huawei\\.nuget\\packages\\etlbox.csv\\2.6.2\\etlbox.csv.2.6.2.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.0.0\\microsoft.bcl.asyncinterfaces.1.0.0.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\huawei\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\6.0.0\\microsoft.extensions.dependencyinjection.6.0.0.nupkg.sha512",

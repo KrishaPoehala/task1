@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="ETLBox" Version="2.6.2" />
+    <PackageReference Include="ETLBox.Csv" Version="2.6.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0" />
   </ItemGroup>
 

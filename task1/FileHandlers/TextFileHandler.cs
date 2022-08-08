@@ -5,35 +5,21 @@ using task1.Helpers;
 
 namespace task1.FileHandlers;
 
-public class TextFileHandler
+public class TextFileHandler :BaseFileHandler<Entities.Transaction>
 {
-    private int _invalidLinesCount;
-    private readonly TextSource<Entities.Transaction> _textSource;
-    private readonly MemoryDestination<Entities.Transaction> _dest;
     public TextFileHandler(string path)
     {
-        _textSource = new TextSource<Entities.Transaction>
+        _source = new TextSource<Entities.Transaction>
         {
             Uri = path,
-            ParseLineFunc = (line, _) => Handle(line)
+            ParseLineFunc = (line, _) => HandleLine(line)
         };
 
         _dest = new MemoryDestination<Entities.Transaction>();
-        _textSource.LinkTo(_dest);
+        _source.LinkTo(_dest);
     }
 
-    public async Task<Entities.FileInfo> ExecuteAsync()
-    {
-        await Network.ExecuteAsync(_textSource);
-        return new Entities.FileInfo() 
-        { 
-            Transactions = _dest.Data, 
-            InvalidLinesCount = _invalidLinesCount,
-            FullPath = _textSource.Uri,
-        };
-    }
-
-    private Entities.Transaction? Handle(string line)
+    private Entities.Transaction? HandleLine(string line)
     {
         try
         {

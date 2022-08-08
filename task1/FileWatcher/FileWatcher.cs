@@ -6,14 +6,13 @@ using task1.Helpers;
 
 namespace task1.FileWatcher;
 
-public class FileWatcher
+public class FileWatcher : IDisposable
 {
     private readonly FileSystemWatcher _watcher;
     private readonly FileSaver.FileSaver _fileSaver;
-    public FileWatcher()
+    public FileWatcher(string pathToListen)
     {
         _fileSaver = new();
-        var pathToListen = ConfigurationManager.AppSettings.Get("A");
         _watcher = new(pathToListen);
 
         _watcher.NotifyFilter = NotifyFilters.Attributes
@@ -29,16 +28,29 @@ public class FileWatcher
         _watcher.Filter = "*.*";//prop filter does not support multipule file filters
     }
 
+    public void Dispose()
+    {
+        _watcher.Dispose();
+    }
+
     async void OnCreated(object sender, FileSystemEventArgs e)
     {
         var extention = Path.GetExtension(e.FullPath);
-        if(extention == ".txt")
+        Entities.FileInfo fileInfo;
+        if (extention == ".txt")
         {
-            var handler = new TextFileHandler(e.FullPath);
-            var fileInfo = await handler.ExecuteAsync();
+            var fileHandler = new TextFileHandler(e.FullPath);
+            fileInfo = await fileHandler.ExecuteAsync();
             await _fileSaver.Remember(fileInfo);
-            return;
         }
+        else if (extention == ".csv")
+        {
+            var csvHandler = new CsvFileHandler(e.FullPath);
+            fileInfo = await csvHandler.ExecuteAsync();
+        }
+        else return;
+
+        await _fileSaver.Remember(fileInfo);
     }
 
 
