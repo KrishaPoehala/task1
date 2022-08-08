@@ -8,15 +8,14 @@ public class FileSaver
 {
     private int _fileNumber = 1;
     private string _currentFolderPath;
+    private string _currentFolderName;
     private readonly System.Timers.Timer _timer;
     private readonly ICollection<Entities.FileInfo> _data;
     public FileSaver()
     {
         var basicPath = ConfigurationManager.AppSettings.Get("B");
-        var currentFolderName = DateTime.Today.ToString("MM/dd/yyyy");
-        _currentFolderPath = Path.Combine(basicPath, currentFolderName);
-
-
+        _currentFolderName = DateTime.Today.ToString("MM/dd/yyyy");
+        _currentFolderPath = Path.Combine(basicPath, _currentFolderName);
         _timer = new();
         _timer.Interval = GetTimerInterval();
         _timer.Elapsed += Elapsed;
@@ -40,6 +39,13 @@ public class FileSaver
 
         var logPath = Path.Combine(_currentFolderPath + "/meta.log");
         await File.WriteAllTextAsync(logPath, str);
+        Reset();
+    }
+
+    private void Reset()
+    {
+        _currentFolderName = DateTime.Today.AddHours(23).ToString("MM/dd/yyyy");
+        _fileNumber = 1;
     }
 
     public async Task Remember(Entities.FileInfo fileInfo)
@@ -50,6 +56,7 @@ public class FileSaver
         var str = JsonConvert.SerializeObject(output);
         await File.WriteAllTextAsync(fileName, str);
         _data.Add(fileInfo);
+        ++_fileNumber;
     }
 
     private double GetTimerInterval()
