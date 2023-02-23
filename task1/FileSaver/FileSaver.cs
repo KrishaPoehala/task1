@@ -32,7 +32,7 @@ public class FileSaver
     private int GetCurrentFileNumber()
     {
         var info = new DirectoryInfo(_currentFolderPath);
-        var lastFileName = info.GetFiles("*.json").Last();
+        var lastFileName = info.GetFiles("*.json").LastOrDefault();
         if(lastFileName is null)
         {
             return 1;
