@@ -1,20 +1,13 @@
-﻿using Newtonsoft.Json;
-using System.Configuration;
-using System.Text.Json.Serialization;
-using task1.FileHandlers;
-using task1.Helpers;
-
-namespace task1.FileWatcher;
+﻿namespace task1.FileWatcher;
 
 public class FileWatcher : IDisposable
 {
     private readonly FileSystemWatcher _watcher;
-    private readonly FileSaver.FileSaver _fileSaver;
-    public FileWatcher(string pathToListen)
+    private readonly FileProcessor.IFileProccessor _fileProcessor;
+    public FileWatcher(string pathToListen,FileProcessor.IFileProccessor fileProccessor)
     {
-        _fileSaver = new();
+        _fileProcessor = fileProccessor;
         _watcher = new(pathToListen);
-
         _watcher.NotifyFilter = NotifyFilters.Attributes
                                       | NotifyFilters.CreationTime
                                       | NotifyFilters.DirectoryName
@@ -35,22 +28,11 @@ public class FileWatcher : IDisposable
 
     async void OnCreated(object sender, FileSystemEventArgs e)
     {
-        var extention = Path.GetExtension(e.FullPath);
-        Entities.FileInfo fileInfo;
-        if (extention == ".txt")
-        {
-            var fileHandler = new TextFileHandler(e.FullPath);
-            fileInfo = await fileHandler.ExecuteAsync();
-        }
-        else if (extention == ".csv")
-        {
-            var csvHandler = new CsvFileHandler(e.FullPath);
-            fileInfo = await csvHandler.ExecuteAsync();
-        }
-        else return;
-
-        await _fileSaver.Remember(fileInfo);
+        await OnCreatedAsync(e);
     }
 
-
+    private async Task OnCreatedAsync(FileSystemEventArgs e)
+    {
+        await _fileProcessor.ProccessFile(e.FullPath);
+    }
 }

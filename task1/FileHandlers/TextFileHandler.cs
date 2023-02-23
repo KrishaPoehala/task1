@@ -5,8 +5,9 @@ using task1.Helpers;
 
 namespace task1.FileHandlers;
 
-public class TextFileHandler :BaseFileHandler<Entities.Transaction>
+public class TextFileHandler :BaseFileHandler
 {
+    private readonly TextSource<Entities.Transaction> _source;
     public TextFileHandler(string path)
     {
         _source = new TextSource<Entities.Transaction>
@@ -17,6 +18,17 @@ public class TextFileHandler :BaseFileHandler<Entities.Transaction>
 
         _dest = new MemoryDestination<Entities.Transaction>();
         _source.LinkTo(_dest);
+    }
+
+    public override async Task<Entities.FileInfo> ExecuteAsync()
+    {
+        await Network.ExecuteAsync(_source);
+        return new Entities.FileInfo()
+        {
+            Transactions = _dest.Data,
+            InvalidLinesCount = _invalidLinesCount,
+            FullPath = _source.Uri,
+        };
     }
 
     private Entities.Transaction? HandleLine(string line)

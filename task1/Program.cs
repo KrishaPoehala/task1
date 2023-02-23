@@ -1,8 +1,6 @@
-﻿
-using System.Configuration;
-using System.Globalization;
+﻿using System.Configuration;
+using task1.FileProcessor;
 using task1.FileWatcher;
-using task1.Helpers;
 
 
 Console.WriteLine("Welcome to the program!");
@@ -15,10 +13,10 @@ while (true)
         continue;
     }
 
-    HandlerCommand(sourceStr);
+    await HandleCommand(sourceStr);
 }
 
-void HandlerCommand(string sourceStr)
+async Task HandleCommand(string sourceStr)
 {
     FileWatcher fileWatcher = null;
     switch (sourceStr.Trim())
@@ -27,8 +25,10 @@ void HandlerCommand(string sourceStr)
             var pathToListen = ConfigurationManager.AppSettings.Get("A");
             if(string.IsNullOrWhiteSpace(pathToListen) == false)
             {
+                var fileProccessor = new FileProccessor();
+                await fileProccessor.ProccessExistingFiles(pathToListen);
+                fileWatcher = new FileWatcher(pathToListen, fileProccessor);
                 Console.WriteLine("The service has been activated");
-                fileWatcher = new FileWatcher(pathToListen);
             }
         break;
         case "Stop":

@@ -7,8 +7,10 @@ using task1.Helpers;
 
 namespace task1.FileHandlers;
 
-public class CsvFileHandler : BaseFileHandler<ExpandoObject>
+public class CsvFileHandler : BaseFileHandler
 {
+    private readonly DataFlowStreamSource<ExpandoObject> _source;
+
     public CsvFileHandler(string path)
     {
         _dest = new MemoryDestination<Entities.Transaction>();
@@ -22,12 +24,23 @@ public class CsvFileHandler : BaseFileHandler<ExpandoObject>
         row.LinkTo(_dest);
     }
 
+    public override async Task<Entities.FileInfo> ExecuteAsync()
+    {
+        await Network.ExecuteAsync(_source);
+        return new Entities.FileInfo()
+        {
+            Transactions = _dest.Data,
+            InvalidLinesCount = _invalidLinesCount,
+            FullPath = _source.Uri,
+        };
+    }
+
     public Transaction Handle(ExpandoObject data)
     {
         dynamic d = data;
         try
         {
-            var transaction = new Entities.Transaction()
+            var transaction = new Transaction()
             {
                 FirstName = d.first_name,
                 LastName = d.last_name,
