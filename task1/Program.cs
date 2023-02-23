@@ -13,26 +13,33 @@ while (true)
         continue;
     }
 
-    await HandleCommand(sourceStr);
+    await HandleCommand(sourceStr.Trim().ToLower());
 }
 
 async Task HandleCommand(string sourceStr)
 {
     FileWatcher fileWatcher = null;
-    switch (sourceStr.Trim())
+    switch (sourceStr)
     {
-        case "Start":
+        case "start":
             var pathToListen = ConfigurationManager.AppSettings.Get("A");
+            
             if(string.IsNullOrWhiteSpace(pathToListen) == false)
             {
                 var fileProccessor = new FileProccessor();
                 await fileProccessor.ProccessExistingFiles(pathToListen);
                 fileWatcher = new FileWatcher(pathToListen, fileProccessor);
                 Console.WriteLine("The service has been activated");
+                return;
             }
+
+            Console.WriteLine("Config file path is not specified");
         break;
-        case "Stop":
+        case "stop":
             fileWatcher?.Dispose();
+        break;
+        default:
+            Console.WriteLine("Invalid command. try again");
         break;
     }
 }

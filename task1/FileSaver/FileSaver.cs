@@ -7,8 +7,9 @@ namespace task1.FileSaver;
 
 public class FileSaver
 {
+    const string OUTPUT_FILE_ORIGIN = "output";
     private int _fileNumber;
-    private string _currentFolderPath;
+    private readonly string _currentFolderPath;
     private string _currentFolderName;
     private readonly System.Timers.Timer _timer;
     private readonly ICollection<Entities.FileInfo> _data;
@@ -38,7 +39,7 @@ public class FileSaver
             return 1;
         }
 
-        string lastFileNumber = new(lastFileName.Name.Skip(6).TakeWhile(x => x != '.').ToArray());
+        string lastFileNumber = new(lastFileName.Name.Skip(OUTPUT_FILE_ORIGIN.Length).TakeWhile(x => x != '.').ToArray());
         return int.Parse(lastFileNumber) + 1;
     }
 
@@ -75,7 +76,7 @@ public class FileSaver
     public async Task RememberAsync(Entities.FileInfo fileInfo)
     {
         var fileName = Path.Combine(_currentFolderPath 
-            + $"/output{_fileNumber}.json");
+            + $"/{OUTPUT_FILE_ORIGIN}{_fileNumber}.json");
         var output = DataTransformer.Transform(fileInfo.Transactions);
         var str = JsonConvert.SerializeObject(output);
         await File.WriteAllTextAsync(fileName, str);
